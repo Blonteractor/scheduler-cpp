@@ -1,1 +1,10 @@
-all: clang++ -Wall -Wpedantic -Wformat=2 -Wnull-dereference -Wsign-conversion -g3 -O0 -c /home/priyanshu/Dev/amity/os/scheduling/fcfs.cpp -o ./build/Debug/fcfs.o && clang++ -Wall -Wpedantic -Wformat=2 -Wnull-dereference -Wsign-conversion -g3 -O0 -c /home/priyanshu/Dev/amity/os/scheduling/main.cpp -o ./build/Debug/main.o && clang++ -Wall -Wpedantic -Wformat=2 -Wnull-dereference -Wsign-conversion -g3 -O0 -c /home/priyanshu/Dev/amity/os/scheduling/process.cpp -o ./build/Debug/process.o && clang++ -Wall -Wpedantic -Wformat=2 -Wnull-dereference -Wsign-conversion -g3 -O0 -c /home/priyanshu/Dev/amity/os/scheduling/roundRobin.cpp -o ./build/Debug/roundRobin.o && clang++ -Wall -Wpedantic -Wformat=2 -Wnull-dereference -Wsign-conversion -g3 -O0 -c /home/priyanshu/Dev/amity/os/scheduling/srtf.cpp -o ./build/Debug/srtf.o && clang++ -Wall -Wpedantic -Wformat=2 -Wnull-dereference -Wsign-conversion -g3 -O0 ./build/Debug/fcfs.o ./build/Debug/main.o ./build/Debug/process.o ./build/Debug/roundRobin.o ./build/Debug/srtf.o -o ./build/Debug/outDebug
+all: compile link clean
+
+compile:
+	clang++ -c *.cpp
+
+link:
+	clang++ -o main *.o
+	
+clean:
+	rm -rf *.o 
