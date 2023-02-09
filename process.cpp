@@ -1,8 +1,9 @@
 #include "process.hpp"
 
-Process::Process(int arrivalTime, int burstTime) {
+Process::Process(size_t arrivalTime, size_t burstTime, size_t priority) {
     this->arrivalTime = arrivalTime;
     this->burstTime = burstTime;
+    this->priority = priority;
     this->exitTime = 0;
     this->progress = 0;
     this->state = NotInSystem;
@@ -14,15 +15,19 @@ void Process::reset() {
     this->state = NotInSystem;
 }
 
-int Process::getArrivalTime() const {
+size_t Process::getArrivalTime() const {
     return this->arrivalTime;
 }
 
-int Process::turnAroundTime() const {
+size_t Process::getPriority() const {
+    return this->priority;
+}
+
+size_t Process::turnAroundTime() const {
     return this->exitTime - this->arrivalTime;
 }
 
-int Process::waitTime() const {
+size_t Process::waitTime() const {
     return this->turnAroundTime() - this->burstTime;
 }
 
@@ -34,11 +39,11 @@ void Process::setState(ProcessState state) {
     this->state = state;
 }
 
-int Process::timeToCompletion() const {
+size_t Process::timeToCompletion() const {
     return this->burstTime - this->progress;
 }
 
-int Process::runFor(int time) {
+size_t Process::runFor(size_t time) {
     this->progress += time;
 
     if (this->timeToCompletion() == 0)
@@ -59,11 +64,11 @@ bool Process::isInSystem() const {
     return this->state != NotInSystem;
 }
 
-int Process::runOnce() {
+size_t Process::runOnce() {
     return this->runFor(1);
 }
 
-int Process::runTillEnd() {
+size_t Process::runTillEnd() {
     this->progress = this->burstTime;
     this->state = Finished;
 
@@ -71,8 +76,8 @@ int Process::runTillEnd() {
 }
 
 SchedulerResult Process::computeResult(ProcessList& processes) {
-    int totalTurnAroundTime = 0;
-    int totalWaitTime = 0;
+    size_t totalTurnAroundTime = 0;
+    size_t totalWaitTime = 0;
     for (auto&& process : processes) {
         totalTurnAroundTime += process->turnAroundTime();
         totalWaitTime += process->waitTime();

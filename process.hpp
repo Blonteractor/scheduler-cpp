@@ -2,33 +2,36 @@
 #include <vector>
 
 enum ProcessState { NotInSystem, Ready, Finished };
+typedef std::size_t size_t;
 
 class Process;
 typedef std::vector<Process*> ProcessList;
 
 struct SchedulerResult {
-    int totalTurnAroundTime;
-    int totalWaitTime;
+    size_t totalTurnAroundTime;
+    size_t totalWaitTime;
     float avgWaitTime;
     float avgTurnAroundTime;
 };
 
 class Process {
 private:
-    int arrivalTime;
-    int burstTime;
-    int exitTime;
-    int progress;
+    size_t arrivalTime;
+    size_t burstTime;
+    size_t exitTime;
+    size_t progress;
+    size_t priority;
     ProcessState state;
 public:
-    Process(int arrivalTime, int burstTime);
+    Process(size_t arrivalTime, size_t burstTime, size_t priority = 0);
 
     void reset();
 
-    int getArrivalTime() const;
-    int turnAroundTime() const;
-    int waitTime() const;
-    int timeToCompletion() const;
+    size_t getArrivalTime() const;
+    size_t getPriority() const;
+    size_t turnAroundTime() const;
+    size_t waitTime() const;
+    size_t timeToCompletion() const;
     bool isFinished() const;
     bool isReady() const;
     bool isInSystem() const;
@@ -37,9 +40,9 @@ public:
 
     void setState(ProcessState state);
 
-    int runFor(int time);
-    int runOnce();
-    int runTillEnd();
+    size_t runFor(size_t time);
+    size_t runOnce();
+    size_t runTillEnd();
 
     static SchedulerResult computeResult(ProcessList& processes);
 
