@@ -43,7 +43,10 @@ public:
 
     static SchedulerResult computeResult(ProcessList& processes);
 
-    friend SchedulerResult shortestRemainingTimeFirst(ProcessList& processes);
     friend SchedulerResult firstComeFirstServe(ProcessList& processes);
+    friend SchedulerResult shortestRemainingTimeFirst(ProcessList& processes);
+    friend SchedulerResult shortestJobFirst(ProcessList& processes);
+    friend SchedulerResult highestPriorityFirst(ProcessList& processes);
+    friend SchedulerResult highestPriorityFirstPreemptive(ProcessList& processes);
     friend SchedulerResult roundRobin(ProcessList& processes, int quantum);
 };

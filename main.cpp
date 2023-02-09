@@ -17,6 +17,7 @@ int main() {
     // 	processes.push_back(p);
     // }
 
+    SchedulerResult result;
     auto p1 = new Process(0, 10);
     auto p2 = new Process(1, 6);
     auto p3 = new Process(3, 2);
@@ -26,15 +27,23 @@ int main() {
     processes.push_back(p3);
     processes.push_back(p4);
 
-    std::cout << "Shortest remaining time first: " << std::endl;
-    auto result = shortestRemainingTimeFirst(processes);
+    std::cout << "\n\nFirst come first serve: " << std::endl;
+    result = firstComeFirstServe(processes);
     std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
     std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime;
 
     std::for_each(processes.begin(), processes.end(), [](Process* p) { p->reset(); });
 
-    std::cout << "\n\nFirst come first serve: " << std::endl;
-    result = firstComeFirstServe(processes);
+
+    std::cout << "\n\nShortest job first: " << std::endl;
+    result = shortestJobFirst(processes);
+    std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
+    std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime;
+
+    std::for_each(processes.begin(), processes.end(), [](Process* p) { p->reset(); });
+
+    std::cout << "Shortest remaining time first: " << std::endl;
+    result = shortestRemainingTimeFirst(processes);
     std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
     std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime;
 
@@ -44,4 +53,5 @@ int main() {
     result = roundRobin(processes, 2);
     std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
     std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime;
+
 }
