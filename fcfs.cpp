@@ -3,7 +3,8 @@
 #include "process.hpp"
 
 SchedulerResult firstComeFirstServe(ProcessList& processes) {
-    for (int tick = 0; !std::all_of(processes.begin(), processes.end(), [](Process* p) { return p->isFinished(); });) {
+    int tick = 0;
+    while (!std::all_of(processes.begin(), processes.end(), [](Process* p) { return p->isFinished(); })) {
         for (auto&& process : processes) {
             if (process->arrivalTime <= tick && !process->isFinished())
                 process->state = Ready;

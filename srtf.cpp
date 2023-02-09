@@ -3,7 +3,8 @@
 #include "process.hpp"
 
 SchedulerResult shortestRemainingTimeFirst(ProcessList& processes) {
-	for (int tick = 0; !std::all_of(processes.begin(), processes.end(), [](Process* p) { return p->isFinished(); }); tick++) {
+	int tick = 0;
+	while (!std::all_of(processes.begin(), processes.end(), [](Process* p) { return p->isFinished(); })) {
 		for (auto&& process : processes) {
 			if (process->arrivalTime <= tick && !process->isFinished())
 				process->state = Ready;
@@ -21,6 +22,8 @@ SchedulerResult shortestRemainingTimeFirst(ProcessList& processes) {
 		if (!(*processToRun)->isReady()) continue;
 
 		(*processToRun)->runOnce();
+		tick++;
+
 		if ((*processToRun)->isFinished()) {
 			std::cout << "Process(" << (*processToRun)->arrivalTime << ", " << (*processToRun)->burstTime << ") finished at " << tick + 1 << std::endl;
 			(*processToRun)->exitTime = tick + 1;

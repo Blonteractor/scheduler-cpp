@@ -8,12 +8,13 @@ typedef std::queue<Process*> ProcessQueue;
 
 SchedulerResult roundRobin(ProcessList& processes, int quantum) {
     ProcessQueue pq;
-    Process* lastUnfinishedProcess = nullptr;
+    Process* lastUnfinishedProcess{};
     Process* processToRun;
 
     std::sort(processes.begin(), processes.end(), [](Process* p1, Process* p2) { return p1->arrivalTime < p2->arrivalTime; });
 
-    for (int tick = 0; !std::all_of(processes.begin(), processes.end(), [](Process* p) { return p->isFinished(); });) {
+    int tick = 0;
+    while (!std::all_of(processes.begin(), processes.end(), [](Process* p) { return p->isFinished(); })) {
         for (auto&& process : processes) {
             if (process->arrivalTime <= tick && !process->isFinished() && process != lastUnfinishedProcess) {
                 process->state = Ready;
