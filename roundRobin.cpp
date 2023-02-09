@@ -16,7 +16,7 @@ SchedulerResult roundRobin(ProcessList& processes, int quantum) {
     int tick = 0;
     while (!std::all_of(processes.begin(), processes.end(), [](Process* p) { return p->isFinished(); })) {
         for (auto&& process : processes) {
-            if (process->arrivalTime <= tick && !process->isFinished() && process != lastUnfinishedProcess) {
+            if (process->arrivalTime <= tick && !process->isInSystem() && process != lastUnfinishedProcess) {
                 process->state = Ready;
                 pq.push(process);
             }
@@ -27,8 +27,10 @@ SchedulerResult roundRobin(ProcessList& processes, int quantum) {
             lastUnfinishedProcess = nullptr;
         }
 
+        // processToRun isnt updating ffs
         processToRun = pq.front();
         pq.pop();
+        processToRun->state = NotInSystem;
 
         processToRun->runFor(quantum);
         tick += quantum;
@@ -36,10 +38,10 @@ SchedulerResult roundRobin(ProcessList& processes, int quantum) {
         if (processToRun->isFinished()) {
             std::cout << "Process(" << processToRun->arrivalTime << ", " << processToRun->burstTime << ") finished at " << tick << std::endl;
             processToRun->exitTime = tick;
-            lastUnfinishedProcess = nullptr;
         }
         else {
             lastUnfinishedProcess = processToRun;
+            lastUnfinishedProcess->state = Ready;
         }
     }
 

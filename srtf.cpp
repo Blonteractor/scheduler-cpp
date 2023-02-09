@@ -25,8 +25,8 @@ SchedulerResult shortestRemainingTimeFirst(ProcessList& processes) {
 		tick++;
 
 		if ((*processToRun)->isFinished()) {
-			std::cout << "Process(" << (*processToRun)->arrivalTime << ", " << (*processToRun)->burstTime << ") finished at " << tick + 1 << std::endl;
-			(*processToRun)->exitTime = tick + 1;
+			std::cout << "Process(" << (*processToRun)->arrivalTime << ", " << (*processToRun)->burstTime << ") finished at " << tick << std::endl;
+			(*processToRun)->exitTime = tick;
 		}
 	}
 
