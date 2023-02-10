@@ -18,10 +18,10 @@ int main() {
     // }
 
     SchedulerResult result;
-    auto p1 = new Process(0, 10);
-    auto p2 = new Process(1, 6);
-    auto p3 = new Process(3, 2);
-    auto p4 = new Process(5, 4);
+    auto p1 = new Process(0, 10, 2);
+    auto p2 = new Process(1, 6, 5);
+    auto p3 = new Process(3, 2, 3);
+    auto p4 = new Process(5, 4, 1);
     processes.push_back(p1);
     processes.push_back(p2);
     processes.push_back(p3);
@@ -42,8 +42,22 @@ int main() {
 
     std::for_each(processes.begin(), processes.end(), [](Process* p) { p->reset(); });
 
-    std::cout << "Shortest remaining time first: " << std::endl;
+    std::cout << "\n\nShortest remaining time first: " << std::endl;
     result = shortestRemainingTimeFirst(processes);
+    std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
+    std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime;
+
+    std::for_each(processes.begin(), processes.end(), [](Process* p) { p->reset(); });
+
+    std::cout << "\n\nHighest priority first non-preemptive: " << std::endl;
+    result = highestPriorityFirst(processes);
+    std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
+    std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime;
+
+    std::for_each(processes.begin(), processes.end(), [](Process* p) { p->reset(); });
+
+    std::cout << "\n\nHighest priority first preemptive: " << std::endl;
+    result = highestPriorityFirstPreemptive(processes);
     std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
     std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime;
 
@@ -53,5 +67,4 @@ int main() {
     result = roundRobin(processes, 2);
     std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
     std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime;
-
 }
