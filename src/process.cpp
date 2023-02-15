@@ -1,4 +1,4 @@
-#include "process.hpp"
+#include "process.h"
 
 Process::Process(size_t arrivalTime, size_t burstTime, size_t priority) {
     this->arrivalTime = arrivalTime;

@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <iostream>
 #include <optional>
-#include "process.hpp"
+#include "../process.h"
 
 typedef std::queue<Process*> ProcessQueue;
 

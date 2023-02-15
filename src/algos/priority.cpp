@@ -1,8 +1,8 @@
 #include <iostream>
 #include <algorithm>
-#include "process.hpp"
+#include "../process.h"
 
-SchedulerResult firstComeFirstServe(ProcessList& processes) {
+SchedulerResult highestPriorityFirst(ProcessList& processes) {
     int tick = 0;
     while (!std::all_of(processes.begin(), processes.end(), [](Process* p) { return p->isFinished(); })) {
         for (auto&& process : processes) {
@@ -13,10 +13,10 @@ SchedulerResult firstComeFirstServe(ProcessList& processes) {
         auto processToRun = std::min_element(processes.begin(), processes.end(), [](Process* p1, Process* p2) {
             if (!(p1->isReady() && p2->isReady())) return p1->isReady();
 
-            if (p1->arrivalTime == p2->arrivalTime)
-                return p1->burstTime < p2->burstTime;
-            else
+            if (p1->priority == p2->priority)
                 return p1->arrivalTime < p2->arrivalTime;
+            else
+                return p1->priority > p2->priority;
             });
 
         if (!(*processToRun)->isReady()) continue;

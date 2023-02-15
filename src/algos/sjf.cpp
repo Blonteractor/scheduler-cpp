@@ -1,6 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include "process.hpp"
+#include "../process.h"
 
 SchedulerResult shortestJobFirst(ProcessList& processes) {
     int tick = 0;

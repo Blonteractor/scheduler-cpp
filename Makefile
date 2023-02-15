@@ -1,10 +1,12 @@
-all: compile link clean
+all: compile link
 
 compile:
-	clang++ -c *.cpp
+	clang++ -Wall -c -O0 src/algos/*.cpp
+	clang++ -Wall -c -O0 src/*.cpp
+	mv *.o build/
 
 link:
-	clang++ -o main *.o
+	clang++ -Wall -O0 -o main build/*.o
 	
 clean:
-	rm -rf *.o 
+	rm -rf build
