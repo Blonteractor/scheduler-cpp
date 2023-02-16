@@ -30,42 +30,31 @@ int main() {
 
     std::cout << "\n\nFirst come first serve: " << std::endl;
     result = firstComeFirstServe(processes);
-    std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
-    std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime;
-
-    std::for_each(processes.begin(), processes.end(), [](Process* p) { p->reset(); });
-
+    Process::printResult(result);
+    Process::resetProcessQueue(processes);
 
     std::cout << "\n\nShortest job first: " << std::endl;
     result = shortestJobFirst(processes);
-    std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
-    std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime;
-
-    std::for_each(processes.begin(), processes.end(), [](Process* p) { p->reset(); });
+    Process::printResult(result);
+    Process::resetProcessQueue(processes);
 
     std::cout << "\n\nShortest remaining time first: " << std::endl;
     result = shortestRemainingTimeFirst(processes);
-    std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
-    std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime;
-
-    std::for_each(processes.begin(), processes.end(), [](Process* p) { p->reset(); });
+    Process::printResult(result);
+    Process::resetProcessQueue(processes);
 
     std::cout << "\n\nHighest priority first non-preemptive: " << std::endl;
     result = highestPriorityFirst(processes);
-    std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
-    std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime;
-
-    std::for_each(processes.begin(), processes.end(), [](Process* p) { p->reset(); });
+    Process::printResult(result);
+    Process::resetProcessQueue(processes);
 
     std::cout << "\n\nHighest priority first preemptive: " << std::endl;
     result = highestPriorityFirstPreemptive(processes);
-    std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
-    std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime;
-
-    std::for_each(processes.begin(), processes.end(), [](Process* p) { p->reset(); });
+    Process::printResult(result);
+    Process::resetProcessQueue(processes);
 
     std::cout << "\n\nRound Robin: " << std::endl;
     result = roundRobin(processes, 2);
-    std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
-    std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime;
+    Process::printResult(result);
+    Process::resetProcessQueue(processes);
 }

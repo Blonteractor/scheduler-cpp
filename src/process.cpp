@@ -1,4 +1,6 @@
 #include "process.h"
+#include <iostream>
+#include <algorithm>
 
 Process::Process(size_t arrivalTime, size_t burstTime, size_t priority) {
     this->arrivalTime = arrivalTime;
@@ -75,7 +77,7 @@ size_t Process::runTillEnd() {
     return this->progress;
 }
 
-SchedulerResult Process::computeResult(ProcessList& processes) {
+SchedulerResult Process::computeResult(ProcessList& processes, GanttChart& chart) {
     size_t totalTurnAroundTime = 0;
     size_t totalWaitTime = 0;
     for (auto&& process : processes) {
@@ -83,10 +85,38 @@ SchedulerResult Process::computeResult(ProcessList& processes) {
         totalWaitTime += process->waitTime();
     }
 
+    GanttChart resolvedChart;
+    resolvedChart.push(chart.front());
+    chart.pop();
+
+    while (!chart.empty()) {
+        auto current = chart.front();
+        chart.pop();
+        if (resolvedChart.front()->process == current->process)
+            resolvedChart.front()->end = current->end;
+        else
+            resolvedChart.push(current);
+    }
+
     SchedulerResult s;
+    s.ganttChart = resolvedChart;
     s.totalWaitTime = totalWaitTime;
     s.totalTurnAroundTime = totalTurnAroundTime;
     s.avgTurnAroundTime = (float)totalTurnAroundTime / processes.size();
     s.avgWaitTime = (float)totalWaitTime / processes.size();
     return s;
+}
+
+void Process::printResult(SchedulerResult& result) {
+    std::cout << "Total TAT: " << result.totalTurnAroundTime << "\tTotal WT: " << result.totalWaitTime << std::endl;
+    std::cout << "Average TAT: " << result.avgTurnAroundTime << "\tAverage WT: " << result.avgWaitTime << std::endl;
+    while (!result.ganttChart.empty()) {
+        auto node = result.ganttChart.front();
+        result.ganttChart.pop();
+        std::cout << node->begin << ", " << node->end << " -> " << node->process->getArrivalTime() << std::endl;
+    }
+}
+
+void Process::resetProcessQueue(ProcessList& processes) {
+    std::for_each(processes.begin(), processes.end(), [](Process* p) { p->reset(); });
 }

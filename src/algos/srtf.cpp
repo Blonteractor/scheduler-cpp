@@ -4,6 +4,7 @@
 
 SchedulerResult shortestRemainingTimeFirst(ProcessList& processes) {
 	int tick = 0;
+    GanttChart chart;
 	while (!std::all_of(processes.begin(), processes.end(), [](Process* p) { return p->isFinished(); })) {
 		for (auto&& process : processes) {
 			if (process->arrivalTime <= tick && !process->isFinished())
@@ -20,15 +21,22 @@ SchedulerResult shortestRemainingTimeFirst(ProcessList& processes) {
 			});
 
 		if (!(*processToRun)->isReady()) continue;
+        
+        auto node = new GanttNode;
+        node->process = *processToRun;
+        node->begin = tick;
 
 		(*processToRun)->runOnce();
 		tick++;
+        node->end = tick;
+        
+        chart.push(node);
 
 		if ((*processToRun)->isFinished()) {
-			std::cout << "Process(" << (*processToRun)->arrivalTime << ", " << (*processToRun)->burstTime << ") finished at " << tick << std::endl;
+			// std::cout << "Process(" << (*processToRun)->arrivalTime << ", " << (*processToRun)->burstTime << ") finished at " << tick << std::endl;
 			(*processToRun)->exitTime = tick;
 		}
 	}
 
-	return Process::computeResult(processes);
+	return Process::computeResult(processes, chart);
 }

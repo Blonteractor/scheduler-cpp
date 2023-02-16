@@ -10,6 +10,7 @@ SchedulerResult roundRobin(ProcessList& processes, int quantum) {
     ProcessQueue pq;
     Process* lastUnfinishedProcess{};
     Process* processToRun;
+    GanttChart chart;
 
     std::sort(processes.begin(), processes.end(), [](Process* p1, Process* p2) { return p1->arrivalTime < p2->arrivalTime; });
 
@@ -27,16 +28,22 @@ SchedulerResult roundRobin(ProcessList& processes, int quantum) {
             lastUnfinishedProcess = nullptr;
         }
 
-        // processToRun isnt updating ffs
         processToRun = pq.front();
         pq.pop();
         processToRun->state = NotInSystem;
 
+        auto node = new GanttNode;
+        node->process = processToRun;
+        node->begin = tick;
+
         processToRun->runFor(quantum);
         tick += quantum;
+        node->end = tick;
+        
+        chart.push(node);   
 
         if (processToRun->isFinished()) {
-            std::cout << "Process(" << processToRun->arrivalTime << ", " << processToRun->burstTime << ") finished at " << tick << std::endl;
+            // std::cout << "Process(" << processToRun->arrivalTime << ", " << processToRun->burstTime << ") finished at " << tick << std::endl;
             processToRun->exitTime = tick;
         }
         else {
@@ -45,5 +52,5 @@ SchedulerResult roundRobin(ProcessList& processes, int quantum) {
         }
     }
 
-    return Process::computeResult(processes);
+    return Process::computeResult(processes, chart);
 }

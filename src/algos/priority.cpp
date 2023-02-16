@@ -4,6 +4,7 @@
 
 SchedulerResult highestPriorityFirst(ProcessList& processes) {
     int tick = 0;
+    GanttChart ganttChart;
     while (!std::all_of(processes.begin(), processes.end(), [](Process* p) { return p->isFinished(); })) {
         for (auto&& process : processes) {
             if (process->arrivalTime <= tick && !process->isFinished())
@@ -20,12 +21,19 @@ SchedulerResult highestPriorityFirst(ProcessList& processes) {
             });
 
         if (!(*processToRun)->isReady()) continue;
-
+        
         (*processToRun)->runTillEnd();
+        auto node = new GanttNode;
+        node->process = *processToRun;
+        node->begin = tick;
         tick += (*processToRun)->burstTime;
+        node->end = tick;
+    
+        ganttChart.push(node);
         (*processToRun)->exitTime = tick;
-        std::cout << "Process(" << (*processToRun)->arrivalTime << ", " << (*processToRun)->burstTime << ") finished at " << tick << std::endl;
+        
+        // std::cout << "Process(" << (*processToRun)->arrivalTime << ", " << (*processToRun)->burstTime << ") finished at " << tick << std::endl;
     }
 
-    return Process::computeResult(processes);
+    return Process::computeResult(processes, ganttChart);
 }

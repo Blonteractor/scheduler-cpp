@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <queue>
 
 enum ProcessState { NotInSystem, Ready, Finished };
 typedef std::size_t size_t;
@@ -7,11 +8,20 @@ typedef std::size_t size_t;
 class Process;
 typedef std::vector<Process*> ProcessList;
 
+struct GanttNode {
+    size_t begin;
+    size_t end;
+    Process* process;
+};
+
+typedef std::queue<GanttNode*> GanttChart;
+
 struct SchedulerResult {
     size_t totalTurnAroundTime;
     size_t totalWaitTime;
     float avgWaitTime;
     float avgTurnAroundTime;
+    GanttChart ganttChart;
 };
 
 class Process {
@@ -44,7 +54,9 @@ public:
     size_t runOnce();
     size_t runTillEnd();
 
-    static SchedulerResult computeResult(ProcessList& processes);
+    static SchedulerResult computeResult(ProcessList& processes, GanttChart& chart);
+    static void printResult(SchedulerResult& result);
+    static void resetProcessQueue(ProcessList& processes);
 
     friend SchedulerResult firstComeFirstServe(ProcessList& processes);
     friend SchedulerResult shortestRemainingTimeFirst(ProcessList& processes);
