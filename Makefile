@@ -7,7 +7,7 @@ compile:
 	mv *.o build/
 
 link:
-	clang++ -Wall -O0 -o main build/*.o
+	clang++ -Wall -O0 -o build/outDebug build/*.o
 	
 clean:
 	rm -rf build
