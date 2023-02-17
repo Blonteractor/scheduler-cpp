@@ -54,14 +54,14 @@ public:
     size_t runOnce();
     size_t runTillEnd();
 
-    static SchedulerResult computeResult(ProcessList& processes, GanttChart& chart);
+    static SchedulerResult computeResult(ProcessList& processes, GanttChart& chart, bool resolveChart = true);
     static void printResult(SchedulerResult& result);
     static void resetProcessQueue(ProcessList& processes);
 
-    friend SchedulerResult firstComeFirstServe(ProcessList& processes);
-    friend SchedulerResult shortestRemainingTimeFirst(ProcessList& processes);
-    friend SchedulerResult shortestJobFirst(ProcessList& processes);
-    friend SchedulerResult highestPriorityFirst(ProcessList& processes);
-    friend SchedulerResult highestPriorityFirstPreemptive(ProcessList& processes);
-    friend SchedulerResult roundRobin(ProcessList& processes, int quantum);
+    static SchedulerResult firstComeFirstServe(ProcessList& processes);
+    static SchedulerResult shortestRemainingTimeFirst(ProcessList& processes);
+    static SchedulerResult shortestJobFirst(ProcessList& processes);
+    static SchedulerResult highestPriorityFirst(ProcessList& processes);
+    static SchedulerResult highestPriorityFirstPreemptive(ProcessList& processes);
+    static SchedulerResult roundRobin(ProcessList& processes, int quantum);
 };

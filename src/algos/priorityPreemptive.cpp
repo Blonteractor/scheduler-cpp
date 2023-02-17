@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "../process.h"
 
-SchedulerResult highestPriorityFirstPreemptive(ProcessList& processes) {
+SchedulerResult Process::highestPriorityFirstPreemptive(ProcessList& processes) {
     int tick = 0;
     GanttChart chart;
     while (!std::all_of(processes.begin(), processes.end(), [](Process* p) { return p->isFinished(); })) {
@@ -28,10 +28,10 @@ SchedulerResult highestPriorityFirstPreemptive(ProcessList& processes) {
 
         (*processToRun)->runOnce();
         tick++;
-        node ->end = tick;
+        node->end = tick;
 
         chart.push(node);
-        
+
         if ((*processToRun)->isFinished()) {
             // std::cout << "Process(" << (*processToRun)->arrivalTime << ", " << (*processToRun)->burstTime << ") finished at " << tick << std::endl;
             (*processToRun)->exitTime = tick;

@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "../process.h"
 
-SchedulerResult firstComeFirstServe(ProcessList& processes) {
+SchedulerResult Process::firstComeFirstServe(ProcessList& processes) {
     int tick = 0;
     GanttChart ganttChart;
     while (!std::all_of(processes.begin(), processes.end(), [](Process* p) { return p->isFinished(); })) {

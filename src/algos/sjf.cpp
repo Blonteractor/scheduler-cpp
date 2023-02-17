@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "../process.h"
 
-SchedulerResult shortestJobFirst(ProcessList& processes) {
+SchedulerResult Process::shortestJobFirst(ProcessList& processes) {
     int tick = 0;
     GanttChart chart;
     while (!std::all_of(processes.begin(), processes.end(), [](Process* p) { return p->isFinished(); })) {
@@ -21,7 +21,7 @@ SchedulerResult shortestJobFirst(ProcessList& processes) {
             });
 
         if (!(*processToRun)->isReady()) continue;
-        
+
         auto node = new GanttNode;
         node->process = *processToRun;
         node->begin = tick;

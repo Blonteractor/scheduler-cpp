@@ -6,7 +6,7 @@
 
 typedef std::queue<Process*> ProcessQueue;
 
-SchedulerResult roundRobin(ProcessList& processes, int quantum) {
+SchedulerResult Process::roundRobin(ProcessList& processes, int quantum = 2) {
     ProcessQueue pq;
     Process* lastUnfinishedProcess{};
     Process* processToRun;
@@ -39,8 +39,8 @@ SchedulerResult roundRobin(ProcessList& processes, int quantum) {
         processToRun->runFor(quantum);
         tick += quantum;
         node->end = tick;
-        
-        chart.push(node);   
+
+        chart.push(node);
 
         if (processToRun->isFinished()) {
             // std::cout << "Process(" << processToRun->arrivalTime << ", " << processToRun->burstTime << ") finished at " << tick << std::endl;
@@ -52,5 +52,5 @@ SchedulerResult roundRobin(ProcessList& processes, int quantum) {
         }
     }
 
-    return Process::computeResult(processes, chart);
+    return Process::computeResult(processes, chart, false);
 }

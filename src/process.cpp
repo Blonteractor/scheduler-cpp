@@ -77,7 +77,9 @@ size_t Process::runTillEnd() {
     return this->progress;
 }
 
-SchedulerResult Process::computeResult(ProcessList& processes, GanttChart& chart) {
+SchedulerResult Process::computeResult(ProcessList& processes, GanttChart& chart, bool resolveChart) {
+    SchedulerResult s;
+
     size_t totalTurnAroundTime = 0;
     size_t totalWaitTime = 0;
     for (auto&& process : processes) {
@@ -85,25 +87,30 @@ SchedulerResult Process::computeResult(ProcessList& processes, GanttChart& chart
         totalWaitTime += process->waitTime();
     }
 
-    GanttChart resolvedChart;
-    resolvedChart.push(chart.front());
-    chart.pop();
-
-    while (!chart.empty()) {
-        auto current = chart.front();
-        chart.pop();
-        if (resolvedChart.front()->process == current->process)
-            resolvedChart.front()->end = current->end;
-        else
-            resolvedChart.push(current);
-    }
-
-    SchedulerResult s;
-    s.ganttChart = resolvedChart;
     s.totalWaitTime = totalWaitTime;
     s.totalTurnAroundTime = totalTurnAroundTime;
     s.avgTurnAroundTime = (float)totalTurnAroundTime / processes.size();
     s.avgWaitTime = (float)totalWaitTime / processes.size();
+
+    if (resolveChart)
+    {
+        GanttChart resolvedChart;
+        resolvedChart.push(chart.front());
+        chart.pop();
+
+        while (!chart.empty()) {
+            auto current = chart.front();
+            chart.pop();
+            if (resolvedChart.back()->process == current->process)
+                resolvedChart.back()->end = current->end;
+            else
+                resolvedChart.push(current);
+        }
+
+        s.ganttChart = resolvedChart;
+    } else 
+        s.ganttChart = chart;
+
     return s;
 }
 

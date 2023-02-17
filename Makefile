@@ -1,4 +1,5 @@
-all: compile link
+all: build run
+build: compile link
 
 compile:
 	clang++ -Wall -c -O0 src/algos/*.cpp
@@ -10,3 +11,6 @@ link:
 	
 clean:
 	rm -rf build
+
+run: 
+	./main

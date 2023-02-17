@@ -2,9 +2,9 @@
 #include <algorithm>
 #include "../process.h"
 
-SchedulerResult shortestRemainingTimeFirst(ProcessList& processes) {
+SchedulerResult Process::shortestRemainingTimeFirst(ProcessList& processes) {
 	int tick = 0;
-    GanttChart chart;
+	GanttChart chart;
 	while (!std::all_of(processes.begin(), processes.end(), [](Process* p) { return p->isFinished(); })) {
 		for (auto&& process : processes) {
 			if (process->arrivalTime <= tick && !process->isFinished())
@@ -21,16 +21,16 @@ SchedulerResult shortestRemainingTimeFirst(ProcessList& processes) {
 			});
 
 		if (!(*processToRun)->isReady()) continue;
-        
-        auto node = new GanttNode;
-        node->process = *processToRun;
-        node->begin = tick;
+
+		auto node = new GanttNode;
+		node->process = *processToRun;
+		node->begin = tick;
 
 		(*processToRun)->runOnce();
 		tick++;
-        node->end = tick;
-        
-        chart.push(node);
+		node->end = tick;
+
+		chart.push(node);
 
 		if ((*processToRun)->isFinished()) {
 			// std::cout << "Process(" << (*processToRun)->arrivalTime << ", " << (*processToRun)->burstTime << ") finished at " << tick << std::endl;
